@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Inject, Injectable } from '@angular/core';
+import { computed, inject, Inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenResponse } from '../models/TokenResponse';
 import { API_URL } from '../tokens/api.tokens';
@@ -16,27 +16,33 @@ export class AuthService {
 
   private readonly router = inject(Router);
 
+  private readonly _isAuthenticated = signal<boolean>(
+    localStorage.getItem('authToken') !== null,
+  );
+
+  isAuthenticated = computed(() => this._isAuthenticated());
+
+  setAuthenticated(value: boolean) {
+    this._isAuthenticated.set(value);
+  }
+
   constructor(
     private readonly http: HttpClient,
-    @Inject(API_URL) private readonly uri: string
+    @Inject(API_URL) private readonly uri: string,
   ) {}
 
   login(body: AuthRequest): Observable<TokenResponse> {
     return this.http.post<TokenResponse>(
       `${this.uri}/${this.route}/login`,
-      body
+      body,
     );
   }
 
   register(body: AuthRequest): Observable<TokenResponse> {
     return this.http.post<TokenResponse>(
       `${this.uri}/${this.route}/register`,
-      body
+      body,
     );
-  }
-
-  isAuthenticated(): boolean {
-    return localStorage.getItem('authToken') !== null;
   }
 
   getAccessToken(): string | null {
@@ -53,16 +59,15 @@ export class AuthService {
 
   logout() {
     localStorage.clear();
+    this.setAuthenticated(false);
     this.router.navigateByUrl('/login');
   }
 
   storeResponse(data: TokenResponse) {
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('refreshToken', data.refreshToken);
-    localStorage.setItem(
-      'authUser',
-      JSON.stringify(JSON.stringify(jwtDecode(data.token)))
-    );
+    localStorage.setItem('authUser', JSON.stringify(jwtDecode(data.token)));
+    this.setAuthenticated(true);
     this.router.navigateByUrl('/');
   }
 }

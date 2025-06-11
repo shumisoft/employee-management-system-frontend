@@ -2,5 +2,7 @@
   class="h-16 p-8 capitalize bg-white shadow-lg flex items-center justify-between"
 >
   <div class="text-2xl">Employee management system</div>
-  <div routerLink="/logout" class="links">logout</div>
+  @if (isAuthenticated()) {
+    <div routerLink="/logout" class="links">logout</div>
+  }
 </nav>

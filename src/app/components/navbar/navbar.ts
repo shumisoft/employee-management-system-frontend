@@ -1,8 +1,7 @@
-import { AuthService } from './../../services/auth-service';
-import { Component, inject } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { Sidebar } from '../sidebar/sidebar';
 import { CommonModule } from '@angular/common';
+import { Component, inject, Signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,4 +9,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {}
+export class Navbar {
+  private authService = inject(AuthService);
+  isAuthenticated: Signal<boolean> = this.authService.isAuthenticated;
+}
