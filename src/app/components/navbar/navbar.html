@@ -2,7 +2,16 @@
   class="h-16 p-8 capitalize bg-white shadow-lg flex items-center justify-between"
 >
   <div class="text-2xl">Employee management system</div>
+
   @if (isAuthenticated()) {
-    <div routerLink="/logout" class="links">logout</div>
+    <button
+      type="button"
+      class="px-4 py-2 rounded-md font-medium
+             text-white bg-red-600 hover:bg-red-700
+             transition-colors duration-200"
+      (click)="logout()"
+    >
+      Logout
+    </button>
   }
 </nav>
