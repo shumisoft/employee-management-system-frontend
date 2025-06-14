@@ -67,7 +67,8 @@ export class AuthService {
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('refreshToken', data.refreshToken);
     localStorage.setItem('authUser', JSON.stringify(jwtDecode(data.token)));
+
     this.setAuthenticated(true);
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/dashboard');
   }
 }

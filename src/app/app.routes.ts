@@ -33,6 +33,11 @@ export const routes: Routes = [
     component: HomePage,
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard',
+      },
+      {
         path: 'dashboard',
         component: Dashboard,
       },
