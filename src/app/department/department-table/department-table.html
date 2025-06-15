@@ -16,48 +16,50 @@
 </div>
 
 <div class="h-full">
-  <table class="min-w-full bg-white border border-gray-200 shadow">
-    <thead>
-      <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
-        <th class="py-3 px-6 text-left rounded-tl-xl">Id</th>
-        <th class="py-3 px-6 text-left">Name</th>
-        <th class="py-3 px-6 text-left">Department</th>
-        <th class="py-3 px-6 text-left rounded-tr-xl">Actions</th>
-      </tr>
-    </thead>
+  <div class="overflow-hidden rounded-xl shadow border border-gray-200">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left rounded-tl-xl">Id</th>
+          <th class="py-3 px-6 text-left">Name</th>
+          <th class="py-3 px-6 text-left">Department</th>
+          <th class="py-3 px-6 text-left rounded-tr-xl">Actions</th>
+        </tr>
+      </thead>
 
-    @if (departmentPage()){
-    <tbody>
-      @for (departmentItem of departmentPage()?.content; track $index) {
-      <tr class="border-b border-gray-200 hover:bg-gray-50 last:rounded-b-xl">
-        <td class="py-3 px-6">{{ departmentItem.id }}</td>
-        <td class="py-3 px-6">{{ departmentItem.name }}</td>
-        <td class="py-3 px-6">{{ departmentItem.description }}</td>
-        <td class="py-3 px-1 flex gap-2">
-          <button
-            routerLink="{{ departmentItem.id }}"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
-          >
-            View
-          </button>
-          <button
-            (click)="onDelete(departmentItem.id)"
-            class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
-          >
-            Delete
-          </button>
-          <button
-            [routerLink]="[departmentItem.id, 'edit']"
-            class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
-          >
-            Edit
-          </button>
-        </td>
-      </tr>
+      @if (departmentPage()){
+        <tbody>
+          @for (departmentItem of departmentPage()?.content; track $index) {
+            <tr class="border-b border-gray-200 hover:bg-gray-50 last:rounded-b-xl">
+              <td class="py-3 px-6">{{ departmentItem.id }}</td>
+              <td class="py-3 px-6">{{ departmentItem.name }}</td>
+              <td class="py-3 px-6">{{ departmentItem.description }}</td>
+              <td class="py-3 px-1 flex gap-2">
+                <button
+                  routerLink="{{ departmentItem.id }}"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
+                >
+                  View
+                </button>
+                <button
+                  (click)="onDelete(departmentItem.id)"
+                  class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
+                >
+                  Delete
+                </button>
+                <button
+                  [routerLink]="[departmentItem.id, 'edit']"
+                  class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
+                >
+                  Edit
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
       }
-    </tbody>
-    }
-  </table>
+    </table>
+  </div>
   <!-- Pagination Controls -->
   <div class="flex justify-end items-center gap-2 mt-6">
     <button
