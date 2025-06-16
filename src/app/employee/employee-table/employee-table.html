@@ -17,62 +17,64 @@
 </div>
 
 <div class="h-full">
-  <table class="min-w-full bg-white border border-gray-200 shadow">
-    <thead>
-      <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
-        <th class="py-3 px-6 text-left rounded-tl-xl">Id</th>
-        <th class="py-3 px-6 text-left">Name</th>
-        <th class="py-3 px-6 text-left">Email</th>
-        <th class="py-3 px-6 text-left">Status</th>
-        <th class="py-3 px-6 text-left rounded-tr-xl">Actions</th>
-      </tr>
-    </thead>
+  <div class="overflow-hidden rounded-xl shadow border border-gray-200">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left rounded-tl-xl">Id</th>
+          <th class="py-3 px-6 text-left">Name</th>
+          <th class="py-3 px-6 text-left">Email</th>
+          <th class="py-3 px-6 text-left">Status</th>
+          <th class="py-3 px-6 text-left rounded-tr-xl">Actions</th>
+        </tr>
+      </thead>
 
-    @if (employeePage()){
-    <tbody>
-      @for (employeeItem of employeePage()?.content; track $index) {
-      <tr class="border-b border-gray-200 hover:bg-gray-50 last:rounded-b-xl">
-        <td class="py-3 px-6">{{ employeeItem.id }}</td>
-        <td class="py-3 px-6">
-          {{ `${employeeItem.firstName} ${employeeItem.lastName}` }}
-        </td>
-        <td class="py-3 px-6">{{ employeeItem.email }}</td>
-        <td
-          [ngClass]="{
-            'text-green-600 font-semibold':
-              employeeItem.status.toString() === 'ACTIVE',
-            'text-red-600 font-semibold':
-              employeeItem.status.toString() === 'INACTIVE'
-          }"
-          class="py-3 px-6 capitalize"
-        >
-          {{ employeeItem.status }}
-        </td>
-        <td class="py-3 px-1 flex gap-2">
-          <button
-            [routerLink]="['/employee', employeeItem.id]"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
-          >
-            View
-          </button>
-          <button
-            (click)="onDelete(employeeItem.id)"
-            class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
-          >
-            Delete
-          </button>
-          <button
-            [routerLink]="['/employee', employeeItem.id, 'edit']"
-            class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
-          >
-            Edit
-          </button>
-        </td>
-      </tr>
+      @if (employeePage()){
+        <tbody>
+          @for (employeeItem of employeePage()?.content; track $index) {
+            <tr class="border-b border-gray-200 hover:bg-gray-50 last:rounded-b-xl">
+              <td class="py-3 px-6">{{ employeeItem.id }}</td>
+              <td class="py-3 px-6">
+                {{ `${employeeItem.firstName} ${employeeItem.lastName}` }}
+              </td>
+              <td class="py-3 px-6">{{ employeeItem.email }}</td>
+              <td
+                [ngClass]="{
+                  'text-green-600 font-semibold':
+                    employeeItem.status.toString() === 'ACTIVE',
+                  'text-red-600 font-semibold':
+                    employeeItem.status.toString() === 'INACTIVE'
+                }"
+                class="py-3 px-6 capitalize"
+              >
+                {{ employeeItem.status }}
+              </td>
+              <td class="py-3 px-1 flex gap-2">
+                <button
+                  [routerLink]="['/employee', employeeItem.id]"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
+                >
+                  View
+                </button>
+                <button
+                  (click)="onDelete(employeeItem.id)"
+                  class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
+                >
+                  Delete
+                </button>
+                <button
+                  [routerLink]="['/employee', employeeItem.id, 'edit']"
+                  class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
+                >
+                  Edit
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
       }
-    </tbody>
-    }
-  </table>
+    </table>
+  </div>
   <!-- Pagination Controls -->
   <div class="flex justify-end items-center gap-2 mt-6">
     <button
