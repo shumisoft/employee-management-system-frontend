@@ -8,7 +8,7 @@
     />
     <button
       [routerLink]="['/employee', 'add']"
-      [queryParams]="departmentId?{departmentId}:{}"
+      [queryParams]="departmentId ? { departmentId } : {}"
       class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
     >
       Add
@@ -16,23 +16,39 @@
   </div>
 </div>
 
-<div class="h-full">
-  <div class="overflow-hidden rounded-xl shadow border border-gray-200">
-    <table class="min-w-full bg-white">
-      <thead>
-        <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
-          <th class="py-3 px-6 text-left rounded-tl-xl">Id</th>
-          <th class="py-3 px-6 text-left">Name</th>
-          <th class="py-3 px-6 text-left">Email</th>
-          <th class="py-3 px-6 text-left">Status</th>
-          <th class="py-3 px-6 text-left rounded-tr-xl">Actions</th>
-        </tr>
-      </thead>
+<!-- Loading state -->
+@if (loading()) {
+  <div class="flex justify-center items-center h-64 text-lg">
+    Fetching employees…
+  </div>
 
-      @if (employeePage()){
+  <!-- Loaded but empty -->
+} @else if (employeePage() && employeePage()?.content?.length === 0) {
+  <div class="flex justify-center items-center h-64 text-gray-500 text-lg">
+    No employees to show.
+  </div>
+
+  <!-- Loaded with data -->
+} @else {
+  <div class="h-full">
+    <div class="overflow-hidden rounded-xl shadow border border-gray-200">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr
+            class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal"
+          >
+            <th class="py-3 px-6 text-left rounded-tl-xl">Id</th>
+            <th class="py-3 px-6 text-left">Name</th>
+            <th class="py-3 px-6 text-left">Email</th>
+            <th class="py-3 px-6 text-left">Status</th>
+            <th class="py-3 px-6 text-left rounded-tr-xl">Actions</th>
+          </tr>
+        </thead>
         <tbody>
           @for (employeeItem of employeePage()?.content; track $index) {
-            <tr class="border-b border-gray-200 hover:bg-gray-50 last:rounded-b-xl">
+            <tr
+              class="border-b border-gray-200 hover:bg-gray-50 last:rounded-b-xl"
+            >
               <td class="py-3 px-6">{{ employeeItem.id }}</td>
               <td class="py-3 px-6">
                 {{ `${employeeItem.firstName} ${employeeItem.lastName}` }}
@@ -43,7 +59,7 @@
                   'text-green-600 font-semibold':
                     employeeItem.status.toString() === 'ACTIVE',
                   'text-red-600 font-semibold':
-                    employeeItem.status.toString() === 'INACTIVE'
+                    employeeItem.status.toString() === 'INACTIVE',
                 }"
                 class="py-3 px-6 capitalize"
               >
@@ -72,32 +88,32 @@
             </tr>
           }
         </tbody>
-      }
-    </table>
+      </table>
+    </div>
+    <!-- Pagination Controls -->
+    <div class="flex justify-end items-center gap-2 mt-6">
+      <button
+        class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition disabled:opacity-50"
+        [disabled]="employeePage()?.first || pageNumber <= 1"
+        (click)="prevPage()"
+      >
+        Previous
+      </button>
+      <span class="px-2 text-gray-600"
+        >Page {{ pageNumber }} of {{ employeePage()?.totalPages }}</span
+      >
+      <button
+        class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition disabled:opacity-50"
+        [disabled]="
+          employeePage()?.last || pageNumber === employeePage()?.totalPages
+        "
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </div>
   </div>
-  <!-- Pagination Controls -->
-  <div class="flex justify-end items-center gap-2 mt-6">
-    <button
-      class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition disabled:opacity-50"
-      [disabled]="employeePage()?.first || pageNumber <= 1"
-      (click)="prevPage()"
-    >
-      Previous
-    </button>
-    <span class="px-2 text-gray-600"
-      >Page {{ pageNumber }} of {{ employeePage()?.totalPages }}</span
-    >
-    <button
-      class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition disabled:opacity-50"
-      [disabled]="
-        employeePage()?.last || pageNumber === employeePage()?.totalPages
-      "
-      (click)="nextPage()"
-    >
-      Next
-    </button>
-  </div>
-</div>
+}
 
 <app-delete-confirmation-modal
   [show]="deleteId !== null"

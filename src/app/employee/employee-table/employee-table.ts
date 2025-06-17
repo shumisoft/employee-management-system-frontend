@@ -1,10 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DeleteConfirmationModal } from '../../components/delete-confirmation-modal/delete-confirmation-modal';
+import { PageResponse } from '../../models/PageResponse';
 import { EmployeeService } from '../employee-service';
 import { Employee, EmployeeStatus } from '../employee-type';
-import { PageResponse } from '../../models/PageResponse';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { DeleteConfirmationModal } from '../../components/delete-confirmation-modal/delete-confirmation-modal';
 
 @Component({
   selector: 'app-employee-table',
@@ -16,7 +16,6 @@ export class EmployeeTable implements OnInit {
   private readonly service = inject(EmployeeService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-
   pageNumber: number = 1;
   pageSize: number = 5;
 
@@ -28,20 +27,32 @@ export class EmployeeTable implements OnInit {
 
   EmployeeStatus = EmployeeStatus;
 
-  constructor() {}
   ngOnInit(): void {
     this.route.queryParams.subscribe((data) => {
       this.pageNumber = Number(data?.['page'] ?? 1);
       this.pageSize = Number(data?.['pageSize'] ?? 5);
       this.getCurPage();
+      
     });
   }
 
+  loading = signal(false);
+
   getCurPage() {
+    this.loading.set(true);
+
     this.service
       .fetchAllEmployees(this.pageNumber, this.pageSize, this.departmentId)
       .subscribe({
-        next: (data) => this.employeePage.set(data),
+        next: (data) => {
+          this.employeePage.set(data);
+          this.loading.set(false);
+
+      console.log(this.employeePage());
+        },
+        error: () => {
+          this.loading.set(false);
+        },
       });
   }
 
