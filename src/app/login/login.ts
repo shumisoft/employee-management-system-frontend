@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth-service';
@@ -18,10 +18,17 @@ export class Login {
   username = '';
   password = '';
   message = signal('');
+  loading = signal(false);
 
-  login() {
-    if (this.username === '' || this.password === '') return;
+  // Clear backend error on input changes
+  onFieldChange() {
+    if (this.message()) this.message.set('');
+  }
 
+  login(form: NgForm) {
+    if (form.invalid) return;
+
+    this.loading.set(true);
     this.message.set('');
 
     this.authService
@@ -29,22 +36,34 @@ export class Login {
       .subscribe({
         next: (data) => {
           this.authService.storeResponse(data);
+          this.loading.set(false);
         },
         error: (e) => {
-          this.message.set(e.error.message);
+          this.message.set(e?.error?.message ?? 'Login failed');
+          this.loading.set(false);
         },
       });
   }
 
-  quickLogin(role: 'ADMIN' | 'EMPLOYEE') {
+  quickLogin(role: 'ADMIN' | 'EMPLOYEE', form: NgForm) {
     if (!environment.demoMode) return;
 
-    const creds = environment?.demoCredentials?.[role] || null;
+    const creds = environment?.demoCredentials?.[role];
 
-    if (creds) {
-      this.username = creds.username;
-      this.password = creds.password;
-      this.login();
-    }
+    if (!creds) return;
+
+    this.username = creds.username;
+    this.password = creds.password;
+
+    // Allow ngModel to sync before submit
+    /**
+     * The only reliable way to do this in template-driven forms is to defer submission to the next macrotask.
+     * Why macrotask (not microtask)
+     * Promise.resolve() = microtask ❌ (too early)
+     * setTimeout(0) = macrotask ✅ (after form sync)
+     */
+    setTimeout(() => {
+      this.login(form);
+    });
   }
 }
