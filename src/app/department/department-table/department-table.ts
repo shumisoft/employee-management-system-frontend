@@ -22,7 +22,7 @@ export class DepartmentTable implements OnInit {
   constructor(
     private readonly service: DepartmentService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -33,10 +33,18 @@ export class DepartmentTable implements OnInit {
     });
   }
 
+  loading = signal(false);
+
   getCurPage() {
+    this.loading.set(true);
+
     this.service.fetchAllDepartments(this.curPage - 1, this.curSize).subscribe({
       next: (data) => {
         this.departmentPage.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
       },
     });
   }

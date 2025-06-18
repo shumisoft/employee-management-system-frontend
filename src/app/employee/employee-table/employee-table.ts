@@ -32,7 +32,6 @@ export class EmployeeTable implements OnInit {
       this.pageNumber = Number(data?.['page'] ?? 1);
       this.pageSize = Number(data?.['pageSize'] ?? 5);
       this.getCurPage();
-      
     });
   }
 
@@ -47,8 +46,6 @@ export class EmployeeTable implements OnInit {
         next: (data) => {
           this.employeePage.set(data);
           this.loading.set(false);
-
-      console.log(this.employeePage());
         },
         error: () => {
           this.loading.set(false);
