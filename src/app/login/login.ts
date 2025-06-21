@@ -35,7 +35,7 @@ export class Login {
       .login({ username: this.username, password: this.password })
       .subscribe({
         next: (data) => {
-          this.authService.storeResponse(data);
+          this.authService.storeResponseAndNavigateToDashboard(data);
           this.loading.set(false);
         },
         error: (e) => {

@@ -67,8 +67,17 @@ export class AuthService {
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('refreshToken', data.refreshToken);
     localStorage.setItem('authUser', JSON.stringify(jwtDecode(data.token)));
-
     this.setAuthenticated(true);
+  }
+
+  storeResponseAndNavigateToDashboard(data: TokenResponse) {
+    this.storeResponse(data);
     this.router.navigateByUrl('/dashboard');
+  }
+
+  refreshToken(): Observable<TokenResponse> {
+    return this.http.post<TokenResponse>(`${this.uri}/${this.route}/refresh`, {
+      refreshToken: this.getRefreshToken(),
+    });
   }
 }
