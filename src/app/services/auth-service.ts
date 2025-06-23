@@ -12,7 +12,8 @@ import { AuthRequest } from '../models/AuthRequest';
   providedIn: 'root',
 })
 export class AuthService {
-  route = 'api/auth';
+  readonly route = 'api/auth';
+  readonly ADMIN = 'ADMIN';
 
   private readonly router = inject(Router);
 
@@ -55,6 +56,15 @@ export class AuthService {
 
   getTokenClaims(): any {
     return JSON.parse(localStorage.getItem('authUser')!);
+  }
+
+  getRole(): string | null {
+    const claims = this.getTokenClaims();
+    return claims?.role ?? null;
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === this.ADMIN;
   }
 
   logout() {
