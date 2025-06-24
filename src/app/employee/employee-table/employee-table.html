@@ -6,13 +6,15 @@
       placeholder="Search employees"
       class="w-64 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-500 placeholder:italic transition"
     />
-    <button
-      [routerLink]="['/employee', 'add']"
-      [queryParams]="departmentId ? { departmentId } : {}"
-      class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
-    >
-      Add
-    </button>
+    @if (isAdmin()) {
+      <button
+        [routerLink]="['/employee', 'add']"
+        [queryParams]="departmentId ? { departmentId } : {}"
+        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+      >
+        Add
+      </button>
+    }
   </div>
 </div>
 
@@ -72,18 +74,20 @@
                 >
                   View
                 </button>
-                <button
-                  (click)="onDelete(employeeItem.id)"
-                  class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
-                >
-                  Delete
-                </button>
-                <button
-                  [routerLink]="['/employee', employeeItem.id, 'edit']"
-                  class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
-                >
-                  Edit
-                </button>
+                @if (isAdmin()) {
+                  <button
+                    (click)="onDelete(employeeItem.id)"
+                    class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    [routerLink]="['/employee', employeeItem.id, 'edit']"
+                    class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
+                  >
+                    Edit
+                  </button>
+                }
               </td>
             </tr>
           }

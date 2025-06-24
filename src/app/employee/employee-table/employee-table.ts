@@ -5,6 +5,7 @@ import { DeleteConfirmationModal } from '../../components/delete-confirmation-mo
 import { PageResponse } from '../../models/PageResponse';
 import { EmployeeService } from '../employee-service';
 import { Employee, EmployeeStatus } from '../employee-type';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-employee-table',
@@ -16,6 +17,10 @@ export class EmployeeTable implements OnInit {
   private readonly service = inject(EmployeeService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly authServie = inject(AuthService);
+
+  isAdmin = signal<boolean>(false);
+  
   pageNumber: number = 1;
   pageSize: number = 5;
 
@@ -28,6 +33,8 @@ export class EmployeeTable implements OnInit {
   EmployeeStatus = EmployeeStatus;
 
   ngOnInit(): void {
+    this.isAdmin.set(this.authServie.isAdmin());
+
     this.route.queryParams.subscribe((data) => {
       this.pageNumber = Number(data?.['page'] ?? 1);
       this.pageSize = Number(data?.['pageSize'] ?? 5);

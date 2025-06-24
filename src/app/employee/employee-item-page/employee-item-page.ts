@@ -5,6 +5,7 @@ import { EmployeeService } from '../employee-service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DeleteConfirmationModal } from '../../components/delete-confirmation-modal/delete-confirmation-modal';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-employee-item-page',
@@ -23,9 +24,13 @@ export class EmployeeItemPage implements OnInit {
   private readonly service = inject(EmployeeService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly authServie = inject(AuthService);
 
-  constructor() {}
+  isAdmin = signal<boolean>(false);
+
   ngOnInit(): void {
+    this.isAdmin.set(this.authServie.isAdmin());
+
     this.route.params.subscribe((data) => {
       this.curId = data?.['id'];
       this.fetchEmployee();

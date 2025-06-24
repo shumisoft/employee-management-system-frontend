@@ -2,20 +2,22 @@
   <!-- Header -->
   <div class="flex justify-between items-center mb-10">
     <h2 class="text-4xl font-bold text-gray-800">Employee Details</h2>
-    <div class="flex gap-3">
-      <button
-        routerLink="edit"
-        class="bg-yellow-400 hover:bg-yellow-500 text-white px-6 py-2 rounded-lg text-lg font-semibold transition"
-      >
-        Edit
-      </button>
-      <button
-        class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg text-lg font-semibold transition"
-        (click)="onDelete()"
-      >
-        Delete
-      </button>
-    </div>
+    @if (isAdmin()) {
+      <div class="flex gap-3">
+        <button
+          routerLink="edit"
+          class="bg-yellow-400 hover:bg-yellow-500 text-white px-6 py-2 rounded-lg text-lg font-semibold transition"
+        >
+          Edit
+        </button>
+        <button
+          class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg text-lg font-semibold transition"
+          (click)="onDelete()"
+        >
+          Delete
+        </button>
+      </div>
+    }
   </div>
 
   <!-- Card -->
@@ -42,11 +44,10 @@
             'text-green-600 font-semibold':
               employee()?.status?.toString() === 'ACTIVE',
             'text-red-600 font-semibold':
-              employee()?.status?.toString() !== 'ACTIVE'
+              employee()?.status?.toString() !== 'ACTIVE',
           }"
         >
           {{ employee()?.status }}
-          {{ employee()?.status?.toString() === "ACTIVE" }}
         </div>
       </div>
       <div>
@@ -76,15 +77,17 @@
       </div>
 
       @if (employee()?.manager?.firstName) {
-      <div>
-        <div class="text-xl font-bold text-gray-700">Manager:</div>
-        <a
-          [routerLink]="['/employee', employee()?.manager?.id]"
-          class="text-xl text-blue-600 hover:underline font-medium"
-        >
-          {{ `${employee()?.manager?.firstName} ${employee()?.manager?.lastName}` }}
-        </a>
-      </div>
+        <div>
+          <div class="text-xl font-bold text-gray-700">Manager:</div>
+          <a
+            [routerLink]="['/employee', employee()?.manager?.id]"
+            class="text-xl text-blue-600 hover:underline font-medium"
+          >
+            {{
+              `${employee()?.manager?.firstName} ${employee()?.manager?.lastName}`
+            }}
+          </a>
+        </div>
       }
     </div>
   </div>
