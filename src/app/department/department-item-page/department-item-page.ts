@@ -5,6 +5,7 @@ import { DepartmentService } from '../department-service';
 import { CommonModule } from '@angular/common';
 import { DeleteConfirmationModal } from '../../components/delete-confirmation-modal/delete-confirmation-modal';
 import { EmployeeTable } from '../../employee/employee-table/employee-table';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-department-item-page',
@@ -15,15 +16,20 @@ import { EmployeeTable } from '../../employee/employee-table/employee-table';
 export class DepartmentItemPage implements OnInit {
   departmentId!: number;
   department = signal<Department | null>(null);
+  isAdmin = signal<boolean>(false);
 
   showDeleteDialog = false;
 
   constructor(
     private readonly service: DepartmentService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly authServie: AuthService,
   ) {}
+
   ngOnInit(): void {
+    this.isAdmin.set(this.authServie.isAdmin());
+
     this.route.params.subscribe((data) => {
       this.departmentId = data?.['id'];
     });

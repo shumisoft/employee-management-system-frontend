@@ -5,6 +5,7 @@ import { DepartmentService } from '../department-service';
 import { CommonModule } from '@angular/common';
 import { PageResponse } from '../../models/PageResponse';
 import { DeleteConfirmationModal } from '../../components/delete-confirmation-modal/delete-confirmation-modal';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-department-table',
@@ -16,6 +17,7 @@ export class DepartmentTable implements OnInit {
   curPage: number = 1;
   curSize: number = 5;
   departmentPage = signal<PageResponse<Department> | null>(null);
+  isAdmin = signal<boolean>(false);
 
   deleteId: number | null = null;
 
@@ -23,9 +25,12 @@ export class DepartmentTable implements OnInit {
     private readonly service: DepartmentService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly authServie: AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin.set(this.authServie.isAdmin());
+
     this.route.queryParams.subscribe((data) => {
       this.curPage = Number(data?.['page'] ?? 1);
       this.curSize = Number(data?.['pageSize'] ?? 5);

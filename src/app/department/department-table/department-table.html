@@ -6,12 +6,14 @@
       placeholder="Search Departments"
       class="w-64 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-500 placeholder:italic transition"
     />
-    <button
-      routerLink="add"
-      class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
-    >
-      Add
-    </button>
+    @if (isAdmin()) {
+      <button
+        routerLink="add"
+        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+      >
+        Add
+      </button>
+    }
   </div>
 </div>
 
@@ -57,18 +59,20 @@
                 >
                   View
                 </button>
-                <button
-                  (click)="onDelete(departmentItem.id)"
-                  class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
-                >
-                  Delete
-                </button>
-                <button
-                  [routerLink]="[departmentItem.id, 'edit']"
-                  class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
-                >
-                  Edit
-                </button>
+                @if (isAdmin()) {
+                  <button
+                    (click)="onDelete(departmentItem.id)"
+                    class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    [routerLink]="[departmentItem.id, 'edit']"
+                    class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
+                  >
+                    Edit
+                  </button>
+                }
               </td>
             </tr>
           }
