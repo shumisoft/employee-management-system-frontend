@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, inject, Injectable } from '@angular/core';
 import { API_URL } from '../tokens/api.tokens';
 import { PageResponse } from '../models/PageResponse';
-import { Employee, EmployeeRequest } from './employee-type';
-import { Observable } from 'rxjs';
+import { Employee, EmployeeOrgChart, EmployeeOrgChartResponse, EmployeeRequest } from './employee-type';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class EmployeeService {
   fetchAllEmployees(
     pageNumber: number,
     pageSize: number,
-    departmentId?: number
+    departmentId?: number,
   ): Observable<PageResponse<Employee>> {
     let params: any = {
       page: pageNumber - 1,
@@ -32,6 +32,26 @@ export class EmployeeService {
     });
   }
 
+  fetchEmployeeOrgChart(
+    id: number,
+    page = 0,
+    pageSize = 5,
+  ): Observable<EmployeeOrgChart> {
+    return this.http
+      .get<EmployeeOrgChartResponse>(
+        `${this.uri}/${this.route}/${id}/org-chart`,
+        { params: { page: page.toString(), pageSize: pageSize.toString() } },
+      )
+      .pipe(
+        map((response) => ({
+          manager: response.manager,
+          employee: response.employee,
+          subordinates: response.subordinates.content,
+          hasMoreSubordinates: !response.subordinates.last,
+        })),
+      );
+  }
+
   fetchEmployee(id: number): Observable<Employee> {
     return this.http.get<Employee>(`${this.uri}/${this.route}/${id}`);
   }
@@ -42,11 +62,11 @@ export class EmployeeService {
 
   updateEmployee(
     id: number,
-    employee: Partial<EmployeeRequest>
+    employee: Partial<EmployeeRequest>,
   ): Observable<Employee> {
     return this.http.patch<Employee>(
       `${this.uri}/${this.route}/${id}`,
-      employee
+      employee,
     );
   }
 

@@ -90,6 +90,12 @@
         </div>
       }
     </div>
+
+    <app-org-chart
+      [orgChart]="orgChart()"
+      [loading]="loadingOrgChart"
+      (loadMore)="loadMoreSubordinates()"
+    />
   </div>
 
   <!-- Back button -->

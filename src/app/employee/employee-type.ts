@@ -1,4 +1,5 @@
 import { Department } from '../department/department-type';
+import { PageResponse } from '../models/PageResponse';
 
 export type Employee = {
   id: number;
@@ -28,3 +29,18 @@ export enum EmployeeStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
+
+export type EmployeeSummary = Partial<Employee>;
+
+export type EmployeeOrgChartResponse = {
+  manager?: EmployeeSummary | null;
+  employee: EmployeeSummary;
+  subordinates: PageResponse<EmployeeSummary>;
+};
+
+export type EmployeeOrgChart = {
+  manager?: EmployeeSummary | null;
+  employee: EmployeeSummary;
+  subordinates: EmployeeSummary[];
+  hasMoreSubordinates: boolean;
+};
