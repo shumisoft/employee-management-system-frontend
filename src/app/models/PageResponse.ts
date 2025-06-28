@@ -1,27 +1,27 @@
+export interface Sort {
+  empty: boolean;
+  unsorted: boolean;
+  sorted: boolean;
+}
+
+export interface Pageable {
+  pageNumber: number;
+  pageSize: number;
+  sort: Sort;
+  offset: number;
+  unpaged: boolean;
+  paged: boolean;
+}
+
 export interface PageResponse<T> {
   content: T[];
-  pageable: {
-    pageNumber: number;
-    pageSize: number;
-    sort: {
-      empty: boolean;
-      unsorted: boolean;
-      sorted: boolean;
-    };
-    offset: number;
-    unpaged: boolean;
-    paged: boolean;
-  };
+  pageable: Pageable;
   totalPages: number;
   totalElements: number;
   last: boolean;
   size: number;
   number: number;
-  sort: {
-    empty: boolean;
-    unsorted: boolean;
-    sorted: boolean;
-  };
+  sort: Sort;
   numberOfElements: number;
   first: boolean;
   empty: boolean;

@@ -13,7 +13,7 @@
           >
             <div class="flex items-center space-x-3">
               <div
-                class="w-12 h-12 flex-shrink-0 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg"
+                class="w-12 h-12 shrink-0 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg"
               >
                 {{ orgChart.manager.firstName?.charAt(0)
                 }}{{ orgChart.manager.lastName?.charAt(0) }}
@@ -41,7 +41,7 @@
         >
           <div class="flex items-center space-x-3">
             <div
-              class="w-14 h-14 flex-shrink-0 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold text-xl"
+              class="w-14 h-14 shrink-0 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold text-xl"
             >
               {{ orgChart.employee.firstName?.charAt(0)
               }}{{ orgChart.employee.lastName?.charAt(0) }}
@@ -83,7 +83,7 @@
           <!-- Subordinates container with connecting lines -->
           <div class="relative">
             <!-- Top horizontal connector line (only visible on larger screens with multiple subordinates) -->
-            @if (orgChart.subordinates.length > 1) {
+            <!-- @if (orgChart.subordinates.length > 1) {
               <div class="hidden lg:block absolute top-0 left-0 right-0 h-px">
                 <div class="flex justify-center items-start h-8">
                   <div
@@ -96,110 +96,112 @@
                   ></div>
                 </div>
               </div>
-            }
+            } -->
 
-            <!-- Subordinates grid -->
-            <div
-              class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-6"
-            >
-              @for (sub of orgChart.subordinates; track sub.id) {
-                <div class="flex flex-col items-center">
-                  <!-- Vertical connector (hidden on mobile) -->
-                  <div
+            <div class="border border-gray-300 rounded-lg shadow-md">
+              <!-- Subordinates grid -->
+              <div
+                class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6"
+              >
+                @for (sub of orgChart.subordinates; track sub.id) {
+                  <div class="flex flex-col items-center">
+                    <!-- Vertical connector (hidden on mobile) -->
+                    <!-- <div
                     class="hidden lg:block w-0.5 h-8 bg-gray-300 -mt-6"
-                  ></div>
+                  ></div> -->
 
-                  <div
-                    #subCard
-                    class="bg-white border-2 border-gray-200 rounded-lg shadow-md p-4 w-full min-w-[200px] max-w-3xs hover:shadow-lg hover:border-blue-400 transition-all cursor-pointer"
-                    [routerLink]="['/employee', sub.id]"
-                  >
-                    <div class="flex items-center space-x-3">
-                      <div
-                        class="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center text-white font-bold"
-                      >
-                        {{ sub.firstName?.charAt(0)
-                        }}{{ sub.lastName?.charAt(0) }}
-                      </div>
-                      <div class="flex-1 min-w-0">
+                    <div
+                      #subCard
+                      class="bg-white border-2 border-gray-200 rounded-lg shadow-md p-3 w-full hover:shadow-lg hover:border-blue-400 transition-all cursor-pointer"
+                      [routerLink]="['/employee', sub.id]"
+                    >
+                      <div class="flex items-center space-x-3">
                         <div
-                          class="font-semibold text-gray-800 text-sm truncate"
+                          class="w-12 h-12 shrink-0 bg-linear-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center text-white font-bold"
                         >
-                          {{ sub.firstName }} {{ sub.lastName }}
+                          {{ sub.firstName?.charAt(0)
+                          }}{{ sub.lastName?.charAt(0) }}
                         </div>
-                        <div class="text-xs text-gray-500">
-                          ID: {{ sub.id }}
-                        </div>
-                        <div class="text-xs mt-1">
-                          <span
-                            class="px-2 py-0.5 rounded-full text-xs inline-block"
-                            [ngClass]="{
-                              'bg-green-100 text-green-700':
-                                sub.status === 'ACTIVE',
-                              'bg-red-100 text-red-700':
-                                sub.status === 'INACTIVE',
-                            }"
+                        <div class="flex-1 min-w-0">
+                          <div
+                            class="font-semibold text-gray-800 text-sm truncate"
                           >
-                            {{ sub.status }}
-                          </span>
+                            {{ sub.firstName }} {{ sub.lastName }}
+                          </div>
+                          <div class="text-xs text-gray-500">
+                            ID: {{ sub.id }}
+                          </div>
+                          <div class="text-xs mt-1">
+                            <span
+                              class="px-2 py-0.5 rounded-full text-xs inline-block"
+                              [ngClass]="{
+                                'bg-green-100 text-green-700':
+                                  sub.status === 'ACTIVE',
+                                'bg-red-100 text-red-700':
+                                  sub.status === 'INACTIVE',
+                              }"
+                            >
+                              {{ sub.status }}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                }
+              </div>
+
+              <!-- Load more button -->
+              @if (orgChart.hasMoreSubordinates) {
+                <div class="flex justify-center mb-6">
+                  <button
+                    class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-md flex items-center space-x-2"
+                    (click)="loadMore.emit()"
+                    [disabled]="loading"
+                  >
+                    @if (loading) {
+                      <svg
+                        class="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          class="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        ></circle>
+                        <path
+                          class="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span>Loading...</span>
+                    } @else {
+                      <svg
+                        class="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        ></path>
+                      </svg>
+                      <span>Load More Subordinates</span>
+                    }
+                  </button>
                 </div>
               }
             </div>
           </div>
-
-          <!-- Load more button -->
-          @if (orgChart.hasMoreSubordinates) {
-            <div class="flex justify-center mt-8">
-              <button
-                class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-6 py-2.5 rounded-lg font-medium transition-colors shadow-md flex items-center space-x-2"
-                (click)="loadMore.emit()"
-                [disabled]="loading"
-              >
-                @if (loading) {
-                  <svg
-                    class="animate-spin h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      class="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    ></circle>
-                    <path
-                      class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  <span>Loading...</span>
-                } @else {
-                  <svg
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7"
-                    ></path>
-                  </svg>
-                  <span>Load More Subordinates</span>
-                }
-              </button>
-            </div>
-          }
         </div>
       }
     </div>

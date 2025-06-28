@@ -31,7 +31,7 @@ export class EmployeeItemPage implements OnInit {
 
   orgChart = signal<EmployeeOrgChart | null>(null);
   orgPage = signal(0);
-  orgPageSize = 5;
+  orgPageSize = 4;
   loadingOrgChart = false;
 
   ngOnInit(): void {
