@@ -44,3 +44,8 @@ export type EmployeeOrgChart = {
   subordinates: EmployeeSummary[];
   hasMoreSubordinates: boolean;
 };
+
+export type EmployeeStatusCount = {
+  active: number;
+  inactive: number;
+};

@@ -2,7 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, inject, Injectable } from '@angular/core';
 import { API_URL } from '../tokens/api.tokens';
 import { PageResponse } from '../models/PageResponse';
-import { Employee, EmployeeOrgChart, EmployeeOrgChartResponse, EmployeeRequest } from './employee-type';
+import {
+  Employee,
+  EmployeeOrgChart,
+  EmployeeOrgChartResponse,
+  EmployeeRequest,
+  EmployeeStatusCount,
+} from './employee-type';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -54,6 +60,12 @@ export class EmployeeService {
 
   fetchEmployee(id: number): Observable<Employee> {
     return this.http.get<Employee>(`${this.uri}/${this.route}/${id}`);
+  }
+
+  getEmployeeStatusCount(): Observable<EmployeeStatusCount> {
+
+    return this.http.get<EmployeeStatusCount>(`${this.uri}/${this.route}/stats`);
+
   }
 
   createEmployee(employee: Partial<EmployeeRequest>): Observable<Employee> {
