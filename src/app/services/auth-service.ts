@@ -23,6 +23,12 @@ export class AuthService {
 
   isAuthenticated = computed(() => this._isAuthenticated());
 
+  _isAdmin = computed(() => {
+    if (!this._isAuthenticated()) return false;
+    const claims = JSON.parse(localStorage.getItem('authUser') ?? 'null');
+    return claims?.role === this.ADMIN;
+  });
+
   setAuthenticated(value: boolean) {
     this._isAuthenticated.set(value);
   }

@@ -13,6 +13,7 @@ import { EmployeeForm } from './employee/employee-form/employee-form';
 import { EmployeeItemPage } from './employee/employee-item-page/employee-item-page';
 import { authGuard } from './guards/auth-guard';
 import { Logout } from './logout/logout';
+import { adminGuard } from './guards/admin-guard';
 
 export const routes: Routes = [
   {
@@ -52,6 +53,7 @@ export const routes: Routes = [
           {
             path: 'add',
             component: EmployeeForm,
+            canActivate: [adminGuard],
           },
           {
             path: ':id',
@@ -60,6 +62,7 @@ export const routes: Routes = [
           {
             path: ':id/edit',
             component: EmployeeForm,
+            canActivate: [adminGuard],
           },
         ],
       },
@@ -75,6 +78,7 @@ export const routes: Routes = [
           {
             path: 'add',
             component: DepartmentForm,
+            canActivate: [adminGuard],
           },
           {
             path: ':id',
@@ -83,6 +87,7 @@ export const routes: Routes = [
           {
             path: ':id/edit',
             component: DepartmentForm,
+            canActivate: [adminGuard],
           },
         ],
       },
