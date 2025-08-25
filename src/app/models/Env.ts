@@ -9,4 +9,5 @@ export interface AppEnvironment {
   production: boolean;
   demoMode: boolean;
   demoCredentials: Record<Role, DemoCredential> | null;
+  urlMaps: Record<string, string>;
 }

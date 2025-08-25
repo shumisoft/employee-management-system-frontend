@@ -7,4 +7,9 @@ export const environment: AppEnvironment = {
     ADMIN: { username: 'demo-admin', password: 'DemoAdmin@123' },
     EMPLOYEE: { username: 'demo-employee', password: 'DemoEmployee@123' },
   },
+  urlMaps: {
+    'ems-fe.ritwikrajsingh.com': 'https://ritwikrajsingh.com',
+    'ems-fe-dev.dipanshushukla.com': 'https://dipanshushukla.com',
+    localhost: 'http://localhost:3000',
+  },
 };

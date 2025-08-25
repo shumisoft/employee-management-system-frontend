@@ -4,4 +4,5 @@ export const environment: AppEnvironment = {
   production: true,
   demoMode: false,
   demoCredentials: null,
+  urlMaps: {},
 };
