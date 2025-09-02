@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([tokenInjectorInterceptor])),
     {
       provide: API_URL,
-      useValue: '',
+      useValue: 'https://ems-be-dev.dipanshushukla.com',
     },
   ],
 };

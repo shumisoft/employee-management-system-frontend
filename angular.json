@@ -53,12 +53,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "employee-management-system-frontend:build:production",
-              "proxyConfig": "proxy.config.json"
+              "buildTarget": "employee-management-system-frontend:build:production"
             },
             "development": {
-              "buildTarget": "employee-management-system-frontend:build:development",
-              "proxyConfig": "proxy.config.json"
+              "buildTarget": "employee-management-system-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
