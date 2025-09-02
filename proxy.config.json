@@ -1,0 +1,12 @@
+{
+  "/api": {
+    "target":"https://ems-be-dev.dipanshushukla.com",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/actuator": {
+    "target":"https://ems-be-dev.dipanshushukla.com",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

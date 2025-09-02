@@ -1,0 +1,89 @@
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-4xl font-bold text-gray-800">Departments</h2>
+  <div class="flex gap-4 items-center">
+    <input
+      type="text"
+      placeholder="Search Departments"
+      class="w-64 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-500 placeholder:italic transition"
+    />
+    <button
+      routerLink="add"
+      class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition"
+    >
+      Add
+    </button>
+  </div>
+</div>
+
+<div class="h-full">
+  <table class="min-w-full bg-white border border-gray-200 shadow">
+    <thead>
+      <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+        <th class="py-3 px-6 text-left rounded-tl-xl">Id</th>
+        <th class="py-3 px-6 text-left">Name</th>
+        <th class="py-3 px-6 text-left">Department</th>
+        <th class="py-3 px-6 text-left rounded-tr-xl">Actions</th>
+      </tr>
+    </thead>
+
+    @if (departmentPage()){
+    <tbody>
+      @for (departmentItem of departmentPage()?.content; track $index) {
+      <tr class="border-b border-gray-200 hover:bg-gray-50 last:rounded-b-xl">
+        <td class="py-3 px-6">{{ departmentItem.id }}</td>
+        <td class="py-3 px-6">{{ departmentItem.name }}</td>
+        <td class="py-3 px-6">{{ departmentItem.description }}</td>
+        <td class="py-3 px-1 flex gap-2">
+          <button
+            routerLink="{{ departmentItem.id }}"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
+          >
+            View
+          </button>
+          <button
+            (click)="onDelete(departmentItem.id)"
+            class="bg-red-400 hover:bg-red-600 text-white px-4 py-2 rounded transition"
+          >
+            Delete
+          </button>
+          <button
+            [routerLink]="[departmentItem.id, 'edit']"
+            class="bg-amber-400 hover:bg-amber-600 text-white px-4 py-2 rounded transition"
+          >
+            Edit
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+    }
+  </table>
+  <!-- Pagination Controls -->
+  <div class="flex justify-end items-center gap-2 mt-6">
+    <button
+      class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition disabled:opacity-50"
+      [disabled]="this.departmentPage()?.first || this.curPage <= 1"
+      (click)="prevPage()"
+    >
+      Previous
+    </button>
+    <span class="px-2 text-gray-600"
+      >Page {{ curPage }} of {{ departmentPage()?.totalPages }}</span
+    >
+    <button
+      class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition disabled:opacity-50"
+      [disabled]="
+        departmentPage()?.last || curPage === departmentPage()?.totalPages
+      "
+      (click)="nextPage()"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<app-delete-confirmation-modal
+  [show]="deleteId !== null"
+  (confirmEvent)="onConfirm()"
+  (cancelEvent)="onCancel()"
+/>
